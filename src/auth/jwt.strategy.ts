@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.respository';
 import { User } from './user.entity';
 import { UnauthorizedException } from '@nestjs/common';
+import * as config from 'config';
 
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -13,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'GOT_Bran_King',
+      secretOrKey: process.env.JWT_SECRET || config.get('jwt.secret'),
     });
   }
 
