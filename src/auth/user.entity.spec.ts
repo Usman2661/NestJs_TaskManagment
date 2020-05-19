@@ -19,6 +19,13 @@ describe('User Entity', () => {
 
       expect(result).toBeTruthy();
     });
-    it('returns false as password is invalid', () => {});
+    it('returns false as password is invalid', async () => {
+      bcrypt.hash.mockReturnValue('wrongPassword');
+      expect(bcrypt.hash).not.toHaveBeenCalled();
+      const result = await user.validatePassword('wrongPassword');
+      expect(bcrypt.hash).toHaveBeenCalledWith('wrongPassword', 'testSalt');
+
+      expect(result).toBeFalsy();
+    });
   });
 });
